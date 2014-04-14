@@ -1,1 +1,7 @@
-Add photos of cell and dots plus the XY links in here....
+'coord.txt' contains tab separated:
+(index, x-coordinate, y-coordinate)
+
+'wf_loc.png' - high resolution image with colourded dots
+'wf_loc.tif' - low resolution image (pixel in the image should correspond to the coordinate)
+
+direcotry 'w' contains images corresponding to the coordinates (index of the coordiate corresponds to the index of the image file). 
