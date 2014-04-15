@@ -23,7 +23,7 @@ function CellView(canvas, dot, image, width, height) {
     this.trueW = width; // the actual width of the pixel grid
     this.trueH = height; // the actual height of the pixel grid
     this.scale = width/this.canvasDimension; // scale of background image
-    this.offset = {x: 1, y:1} // DEBUG: offset
+    this.offset = {x: 0.55, y:0.55} // DEBUG: offset
 }
 
 CellView.prototype.setup = function()
@@ -91,7 +91,7 @@ CellView.prototype.drawDots = function()
         var x = (this.dots[i].x+this.offset.x)/this.scale
         var y = (this.dots[i].y+this.offset.y)/this.scale
         console.log(x,y)
-        ctx.fillRect( x, y, 4, 4)
+        ctx.fillRect( x-5, y-5, 10, 10)
     }
 }
 
@@ -139,6 +139,6 @@ Dot.prototype.checkPos = function(x,y,error)
 }
 
 
-var cell = new CellView("cell", "dot","data/wf_loc.png",39,39);
+var cell = new CellView("cell", "dot","data/wf_loc.png",38,38);
 cell.loadDots(Cell_data);
 
