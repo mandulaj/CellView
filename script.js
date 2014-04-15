@@ -41,15 +41,15 @@ CellView.prototype.setup = function()
     this.canvas.addEventListener("mousedown", function()
     {
         var coords = thisObj.getMousePos(thisObj.mouseX, thisObj.mouseY);
-        console.log(thisObj.mouseX, thisObj.mouseY)
-        console.log(coords)
+        //console.log(thisObj.mouseX, thisObj.mouseY)
+        //console.log(coords)
         for ( var i = 0; i< thisObj.dots.length; i++ )
         {
             if (thisObj.dots[i].checkPos(coords.x,coords.y,0.5))
             {
                 var ctx = thisObj.dot.getContext("2d");
                 ctx.drawImage( thisObj.dots[i].img, 0, 0, thisObj.canvasDimension, thisObj.canvasDimension );
-                console.log(thisObj.dots[i])
+                //console.log(thisObj.dots[i])
                 break;
             }
             
@@ -90,7 +90,7 @@ CellView.prototype.drawDots = function()
     {  
         var x = (this.dots[i].x+this.offset.x)/this.scale
         var y = (this.dots[i].y+this.offset.y)/this.scale
-        console.log(x,y)
+        //console.log(x,y)
         ctx.fillRect( x-5, y-5, 10, 10)
     }
 }
