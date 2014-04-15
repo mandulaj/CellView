@@ -7,17 +7,23 @@
  * CellView.prototype.getMousePos()  - returns mouse coordinates on true scale
  * CellView.prototype.drawDots()     - draws dots corresponding to x,y coordinates from data on canvas
 */
-function CellView(canvas, image, width, height) {
-    
+function CellView(canvas, dot, image, width, height) {
+    var thisObj = this;
+    this.mouseX = 0;
+    this.mouseY = 0;
     this.canvas = document.getElementById(canvas); // DOM object of canvas
+    this.dot = document.getElementById(dot)
+    
     this.img = new Image(); // Main background image
     this.img.src = image; // set the src of background image to image
     this.dots = []; // Array of Dot objects
     this.setup(); // setup
+    this.canvasDimension = this.canvas.width; // 500
+    this.boxDimension = 750;
     this.trueW = width; // the actual width of the pixel grid
     this.trueH = height; // the actual height of the pixel grid
-    this.scale = width/this.canvas.width; // scale of background image
-    this.offset = {x: 8, y:-6} // DEBUG: offset
+    this.scale = width/this.canvasDimension; // scale of background image
+    this.offset = {x: 0, y:0} // DEBUG: offset
 }
 
 CellView.prototype.setup = function()
@@ -25,39 +31,52 @@ CellView.prototype.setup = function()
     var thisObj = this;
     this.img.onload = function () {
         var ctx = thisObj.canvas.getContext( "2d" );
-        ctx.drawImage( thisObj.img, 0, 0, 500, 500 );
+        ctx.drawImage( thisObj.img, 0, 0, thisObj.canvasDimension, thisObj.canvasDimension );
     }
     this.canvas.addEventListener("mousemove", function(evt) 
     {
-        var coords = thisObj.getMousePos(evt);
+        thisObj.mouseX = evt.clientX;
+        thisObj.mouseY = evt.clientY;
+    })
+    this.canvas.addEventListener("mousedown", function()
+    {
+        var coords = thisObj.getMousePos(thisObj.mouseX, thisObj.mouseY);
+        console.log(thisObj.mouseX, thisObj.mouseY)
+        console.log(coords)
         for ( var i = 0; i< thisObj.dots.length; i++ )
         {
             if (thisObj.dots[i].checkPos(coords.x,coords.y,0.5))
             {
-                console.log(thisObj.dots[i].imgName) 
+                var ctx = thisObj.dot.getContext("2d");
+                ctx.drawImage( thisObj.dots[i].img, 0, 0, thisObj.canvasDimension, thisObj.canvasDimension );
+                console.log(thisObj.dots[i])
                 break;
             }
             
         }
-    })
+    });
+    
+    
+    
 }
 
 CellView.prototype.loadDots = function(array)
 {
 	for (var i = 0; i < array.length; i++ )
 	{
-		this.dots.push(new Dot(array[i][1], array[i][2], array[i][0]))
+		this.dots.push(new Dot(array[i][2], array[i][1], array[i][0]))
 	}
 }
 
-CellView.prototype.getMousePos = function(evt)
+CellView.prototype.getMousePos = function(clientX,clientY)
 {
     var rect = this.canvas.getBoundingClientRect();
     var scale = this.scale;
     var offset = this.offset;
+    var thisObj = this;
     var xy = {
-        x: (evt.clientX - rect.left) * scale - offset.x,
-        y: (evt.clientY - rect.top) * scale - offset.y
+        x: (clientX - rect.left)/thisObj.boxDimension * thisObj.canvasDimension * scale - offset.x,
+        y: (clientY - rect.top)/thisObj.boxDimension * thisObj.canvasDimension * scale - offset.y
     };
     return xy;
 }
@@ -72,7 +91,6 @@ CellView.prototype.drawDots = function()
         var x = (this.dots[i].x+this.offset.x)/this.scale
         var y = (this.dots[i].y+this.offset.y)/this.scale
         console.log(x,y)
-        console.log(this.scale)
         ctx.fillRect( x, y, 4, 4)
     }
 }
@@ -87,6 +105,7 @@ function Dot(x,y,img)
 {
     this.img = new Image(); // Enlarged image of the dot
     this.imgName = this.makeImgName(img); // Generate path to dot image
+    this.img.src = this.makeImgName(img);
     this.x = parseFloat(x); // x coordinate on true scale of background image
     this.y = parseFloat(y); // y coordinate on true scale of background image
 }
@@ -120,6 +139,6 @@ Dot.prototype.checkPos = function(x,y,error)
 }
 
 
-var cell = new CellView("cell","data/wf_loc.png",39,39);
+var cell = new CellView("cell", "dot","data/wf_loc.png",39,39);
 cell.loadDots(Cell_data);
 
