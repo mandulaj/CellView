@@ -23,7 +23,7 @@ function CellView(canvas, dot, image, width, height) {
     this.trueW = width; // the actual width of the pixel grid
     this.trueH = height; // the actual height of the pixel grid
     this.scale = width/this.canvasDimension; // scale of background image
-    this.offset = {x: 0, y:0} // DEBUG: offset
+    this.offset = {x: 1, y:1} // DEBUG: offset
 }
 
 CellView.prototype.setup = function()
