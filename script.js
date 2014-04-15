@@ -35,18 +35,30 @@ function Dot(x,y,img)
 
 Dot.prototype.makeImgName = function(imgNum)
 {
-	var path = "data/w/";
-	var prfix = "w_";
-	var sufix = ".png"
-	var num = "";
+    var path = "data/w/";
+    var prfix = "w_";
+    var sufix = ".png"
+    var num = "";
 	
-	for ( var i = 0; i< (3-imgNum.length); i++ )
-	{
-		num += "0"
-	}
-	num += imgNum;
+    for ( var i = 0; i< (3-imgNum.length); i++ )
+    {
+        num += "0"
+    }
+    num += imgNum;
 	
-	return path + prfix + num + sufix;
+    return path + prfix + num + sufix;
+}
+
+Dot.prototype.checkPos = function(x,y,error)
+{
+    if (abs(this.x-x)< error)
+    {
+        if (abs(this.y-y)< error )
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 var cell = new CellView("cell");
