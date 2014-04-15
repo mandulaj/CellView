@@ -1,16 +1,23 @@
 //JavaScript
 
+/* CellView - object reperesenting the canvas
+ * 
+ * CellView.prototype.setup()  - setup object
+ * CellView.prototype.loadDots(dots) - loads Dot objects into this.dots array form json file
+ * CellView.prototype.getMousePos()  - returns mouse coordinates on true scale
+ * CellView.prototype.drawDots()     - draws dots corresponding to x,y coordinates from data on canvas
+*/
 function CellView(canvas, image, width, height) {
     
-    this.canvas = document.getElementById(canvas);
-    this.img = new Image();
-    this.img.src = image;
-    this.dots = [];
-    this.setup();
-    this.trueW = width;
-    this.trueH = height;
-    this.scale = width/500;
-    this.offset = {x: 8, y:-6}
+    this.canvas = document.getElementById(canvas); // DOM object of canvas
+    this.img = new Image(); // Main background image
+    this.img.src = image; // set the src of background image to image
+    this.dots = []; // Array of Dot objects
+    this.setup(); // setup
+    this.trueW = width; // the actual width of the pixel grid
+    this.trueH = height; // the actual height of the pixel grid
+    this.scale = width/this.canvas.width; // scale of background image
+    this.offset = {x: 8, y:-6} // DEBUG: offset
 }
 
 CellView.prototype.setup = function()
@@ -70,13 +77,18 @@ CellView.prototype.drawDots = function()
     }
 }
 
-
+/* Object representing each dot
+ *
+ * Dot.prototype.makeImgName(imgNum)  -    create path to image
+ * Dot.prototype.checkPos(x,y,error)     -  return true if x and y are in the error range of this.x and this.y
+ * 
+ */
 function Dot(x,y,img)
 {
-    this.img = new Image();
-    this.imgName = this.makeImgName(img);
-    this.x = parseFloat(x);
-    this.y = parseFloat(y);
+    this.img = new Image(); // Enlarged image of the dot
+    this.imgName = this.makeImgName(img); // Generate path to dot image
+    this.x = parseFloat(x); // x coordinate on true scale of background image
+    this.y = parseFloat(y); // y coordinate on true scale of background image
 }
 
 Dot.prototype.makeImgName = function(imgNum)
