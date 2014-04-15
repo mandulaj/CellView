@@ -12,7 +12,7 @@ function CellView(canvas, dot, image, width, height) {
     this.mouseX = 0;
     this.mouseY = 0;
     this.canvas = document.getElementById(canvas); // DOM object of canvas
-    this.dot = document.getElementById(dot)
+    this.dot = document.getElementById(dot);
     
     this.img = new Image(); // Main background image
     this.img.src = image; // set the src of background image to image
@@ -22,42 +22,45 @@ function CellView(canvas, dot, image, width, height) {
     this.boxDimension = 750;
     this.trueW = width; // the actual width of the pixel grid
     this.trueH = height; // the actual height of the pixel grid
-    this.scale = width/this.canvasDimension; // scale of background image
-    this.offset = {x: 0.55, y:0.55} // DEBUG: offset
+    this.scale = width / this.canvasDimension; // scale of background image
+    this.offset = {x: 0.55, y: 0.55}; // DEBUG: offset
 }
 
-CellView.prototype.setup = function()
-{
+CellView.prototype.setup = function () {
     var thisObj = this;
     this.img.onload = function () {
-        var ctx = thisObj.canvas.getContext( "2d" );
-        ctx.drawImage( thisObj.img, 0, 0, thisObj.canvasDimension, thisObj.canvasDimension );
-    }
-    this.canvas.addEventListener("mousemove", function(evt) 
-    {
+        var ctx = thisObj.canvas.getContext("2d");
+        ctx.drawImage(thisObj.img, 0, 0, thisObj.canvasDimension, thisObj.canvasDimension);
+    };
+    this.canvas.addEventListener("mousemove", function (evt) {
         thisObj.mouseX = evt.clientX;
         thisObj.mouseY = evt.clientY;
-    })
-    this.canvas.addEventListener("mousedown", function()
-    {
-        var coords = thisObj.getMousePos(thisObj.mouseX, thisObj.mouseY);
+    });
+    this.canvas.addEventListener("mousedown", function () {
+        var coords = thisObj.getMousePos(thisObj.mouseX, thisObj.mouseY),
+            i = 0;
         //console.log(thisObj.mouseX, thisObj.mouseY)
         //console.log(coords)
-        for ( var i = 0; i< thisObj.dots.length; i++ )
-        {
-            if (thisObj.dots[i].checkPos(coords.x,coords.y,0.5))
-            {
+        for (i = 0; i < thisObj.dots.length; i++) {
+            if (thisObj.dots[i].checkPos(coords.x, coords.y, 0.5)) {
                 var ctx = thisObj.dot.getContext("2d");
-                ctx.drawImage( thisObj.dots[i].img, 0, 0, thisObj.canvasDimension, thisObj.canvasDimension );
+                ctx.drawImage(thisObj.dots[i].img, 0, 0, thisObj.canvasDimension, thisObj.canvasDimension);
                 //console.log(thisObj.dots[i])
+                
+                
+                
+                var ctx = thisObj.canvas.getContext("2d");
+                ctx.drawImage(thisObj.img, 0, 0, thisObj.canvasDimension, thisObj.canvasDimension);
+                var x = (thisObj.dots[i].x +thisObj.offset.x) / thisObj.scale;
+                var y = (thisObj.dots[i].y + thisObj.offset.y) / thisObj.scale;
+                //console.log(x,y)
+                ctx.fillStyle = "red";
+                ctx.fillRect( x-5, y-5, 10, 10);
                 break;
             }
             
         }
     });
-    
-    
-    
 }
 
 CellView.prototype.loadDots = function(array)
