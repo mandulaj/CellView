@@ -1,0 +1,6 @@
+{
+    "name": "CellView",
+    "dependencies": {
+        "csv" : "0.3.7"
+    }
+}
