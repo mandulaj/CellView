@@ -7,7 +7,7 @@ fs.readFile("./data/coord.txt", function(err, data) {
     var converted = str.replace(/\t/g, ',');
     var dataArray = [];
     csv().from.string( converted ).to.array( function(data){
-        fs.writeFile( "./data/coord.json", JSON.stringify( data ), function( err )
+        fs.writeFile( "./data/coord.json", "var Cell_data = " + JSON.stringify( data ), function( err )
         {
         	if ( err ) throw err;
         	console.log( "Saved in data/coord.js" );
