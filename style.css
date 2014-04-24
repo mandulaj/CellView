@@ -11,3 +11,9 @@ canvas {
     height: 750px;
     border: 1px solid black;
 }
+
+canvas_small {
+    width: 750px;
+    height: 750px;
+    border: 1px solid black;
+}
