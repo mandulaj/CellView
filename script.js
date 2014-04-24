@@ -87,9 +87,9 @@ CellView.prototype.setup = function () {
         var y = thisObj.dots[imin].y_canvas;// + thisObj.offset.y) * thisObj.scaleY;
         //console.log(x,y)
         var ctx = thisObj.canvas.getContext("2d");
-//         ctx.drawImage(thisObj.img, 0, 0, thisObj.canvas.width, thisObj.canvas.height);
-//         ctx.fillStyle = "red";
-//         ctx.fillRect( x, y, 10, 10);       
+        ctx.drawImage(thisObj.img, 0, 0, thisObj.canvas.width, thisObj.canvas.height);
+        ctx.fillStyle = "red";
+        ctx.fillRect( x, y, 10, 10);       
     });
 }
 
