@@ -86,7 +86,7 @@ CellView.prototype.setup = function () {
         var x = thisObj.dots[imin].x_canvas;//(thisObj.dots[imin].x +thisObj.offset.x) * thisObj.scaleX;
         var y = thisObj.dots[imin].y_canvas;// + thisObj.offset.y) * thisObj.scaleY;
         //console.log(x,y)
-        var ctx = thisObj.canvas.getContext("2d");
+    	var ctx = thisObj.canvas.getContext("2d");
         ctx.drawImage(thisObj.img, 0, 0, thisObj.canvas.width, thisObj.canvas.height);
         ctx.fillStyle = "red";
         ctx.fillRect( x, y, 10, 10);       
@@ -115,6 +115,7 @@ CellView.prototype.getMousePos = function(clientX,clientY)
         y: (clientY - rect.top)/thisObj.canvas.height*scaleY// - offset.y
 
     };
+    console.log(thisObj.canvas.width,thisObj.canvas.height)
     var ctx = thisObj.canvas.getContext("2d");
     ctx.drawImage(thisObj.img, 0, 0, thisObj.canvas.width, thisObj.canvas.height);
                 //console.log(x,y)

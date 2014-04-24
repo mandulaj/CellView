@@ -10,6 +10,8 @@ canvas {
     width: 987px;
     height: 987px;
     border: 1px solid black;
+    float: left;
+    margin: 10px;
 }
 
 canvas_nonsquare {
@@ -22,4 +24,10 @@ canvas_small {
     width: 200px;
     height: 200px;
     border: 1px solid black;
+}
+
+#dot{
+	width: 400px;
+	height: 400px; 
+	
 }
