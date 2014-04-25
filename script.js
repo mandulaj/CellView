@@ -18,16 +18,7 @@ function CellView(canvas, dot, image) {
     this.img.src = image; // set the src of background image to image
     this.dots = []; // Array of Dot objects
     this.setup(); // setup
-    //this.canvasDimension = this.canvas.width; // 500
-    //this.boxDimensionX = this.canvas.widht;
-    //this.boxDimensionY = this.canvas.height;
-    //this.boxDimension = 550;
-    //this.trueW = width; // the actual width of the pixel grid
-    //this.trueH = height; // the actual height of the pixel grid
-    //this.scale = this.canvasDimension / width; // scale of background image
-    this.scaleX = 1000;//3.38;//*this.canvas.width / width; // scale for the mouse
-    this.scaleY = 1000;//4.24;//*this.canvas.height / height; // 
-    this.offset = {x: 0., y: 0.}; // DEBUG: offset
+    this.offset = {x: -8., y: -8.}; // DEBUG: offset
 }
 
 CellView.prototype.setup = function () {
@@ -41,39 +32,13 @@ CellView.prototype.setup = function () {
         thisObj.mouseY = evt.clientY;
     });
     this.canvas.addEventListener("mousedown", function () {
-        var coords = thisObj.getMousePos(thisObj.mouseX, thisObj.mouseY),
+        var coords_canvas = thisObj.getMousePos(thisObj.mouseX, thisObj.mouseY),
             i = 0;
-        //console.log(thisObj.mouseX, thisObj.mouseY)
-        //console.log(coords)
-//         for (i = 0; i < thisObj.dots.length; i++) {
-//             if (thisObj.dots[i].checkPos(coords.x, coords.y, 5)) {
-//                 var ctx = thisObj.dot.getContext("2d");
-//                 ctx.drawImage(thisObj.dots[i].img, 0, 0, thisObj.canvas.width, thisObj.canvas.height);
-//                 console.log(thisObj.dots[i])                                
-//                 
-//                 var ctx = thisObj.canvas.getContext("2d");
-//                 ctx.drawImage(thisObj.img, 0, 0, thisObj.canvas.width, thisObj.canvas.height);
-//                 var x = (thisObj.dots[i].x +thisObj.offset.x) * thisObj.scaleX;
-//                 var y = (thisObj.dots[i].y + thisObj.offset.y) * thisObj.scaleY;
-//                 //console.log(x,y)
-//                 ctx.fillStyle = "red";
-//                 ctx.fillRect( x, y, 10, 10);
-//                 break;
-//             }
-// //             else {
-// //             	var ctx = thisObj.canvas.getContext("2d");
-// //                 ctx.drawImage(thisObj.img, 0, 0, thisObj.canvas.width, thisObj.canvas.height);
-// //                 //console.log(x,y)
-// //             	ctx.fillStyle = "green";
-// //                 ctx.fillRect( coords.x, coords.y, 10, 10);
-// //                 
-// //             }
-//             
-//         }
+
 		var distmin = thisObj.canvas.width + thisObj.canvas.height;
 		var imin = 0;
         for (i = 0; i < thisObj.dots.length; i++) {
-        	var dist = thisObj.dots[i].distance(coords.x,coords.y);
+        	var dist = thisObj.dots[i].distance(coords_canvas.x,coords_canvas.y);
         	if (dist < distmin) {
         		distmin = dist;
         		imin = i;         	
@@ -81,15 +46,15 @@ CellView.prototype.setup = function () {
         }
         var ctx = thisObj.dot.getContext("2d");
         ctx.drawImage(thisObj.dots[imin].img, 0, 0, thisObj.canvas.width, thisObj.canvas.height);
-        console.log(thisObj.dots[imin])                                
-                
+        console.log(thisObj.dots[imin])
+        console.log(thisObj.dots[imin].x_canvas,thisObj.dots[imin].y_canvas)                                
         var x = thisObj.dots[imin].x_canvas;//(thisObj.dots[imin].x +thisObj.offset.x) * thisObj.scaleX;
         var y = thisObj.dots[imin].y_canvas;// + thisObj.offset.y) * thisObj.scaleY;
-        //console.log(x,y)
     	var ctx = thisObj.canvas.getContext("2d");
         ctx.drawImage(thisObj.img, 0, 0, thisObj.canvas.width, thisObj.canvas.height);
         ctx.fillStyle = "red";
-        ctx.fillRect( x, y, 10, 10);       
+        var bs = 10
+        ctx.fillRect( x-3, y-3, bs, bs);       
     });
 }
 
@@ -111,16 +76,15 @@ CellView.prototype.getMousePos = function(clientX,clientY)
     var xy = {
         //x: (clientX - rect.left)/thisObj.boxDimensionX * thisObj.canvas.width / scaleX - offset.x,
         //y: (clientY - rect.top)/thisObj.boxDimensionY * thisObj.canvas.height / scaleY - offset.y
-        x: (clientX - rect.left)/thisObj.canvas.width*scaleX,// - offset.x,
-        y: (clientY - rect.top)/thisObj.canvas.height*scaleY// - offset.y
+        x: clientX - rect.left + this.offset.x,//(clientX - rect.left)/thisObj.canvas.width*scaleX,// - offset.x,
+        y: clientY - rect.top + this.offset.y//(clientY - rect.top)/thisObj.canvas.height*scaleY// - offset.y
 
     };
-    console.log(thisObj.canvas.width,thisObj.canvas.height)
     var ctx = thisObj.canvas.getContext("2d");
-    ctx.drawImage(thisObj.img, 0, 0, thisObj.canvas.width, thisObj.canvas.height);
-                //console.log(x,y)
-    ctx.fillStyle = "green";
-    ctx.fillRect( xy.x,xy.y, 10, 10);
+//    ctx.drawImage(thisObj.img, 0, 0, thisObj.canvas.width, thisObj.canvas.height);
+//    ctx.fillStyle = "green";
+//    ctx.fillRect( xy.x,xy.y, 10, 10);
+//    console.log(xy.x,xy.y)
     return xy;
 }
 
@@ -132,11 +96,8 @@ CellView.prototype.drawDots = function()
     ctx.fillStyle = "red";
     for (var i = 0; i< this.dots.length; i++)
     {  
-        //var x = (this.dots[i].x+this.offset.x - rect.left)* this.scaleCoordX
-        //var y = (this.dots[i].y+this.offset.y - rect.top) * this.scaleCoordY
         var x = this.dots[i].x_canvas;
         var y = this.dots[i].y_canvas;
-        //console.log(x,y)
         ctx.fillRect( x, y, 5, 5)
     }
 }
@@ -154,8 +115,8 @@ function Dot(x,y,img)
     this.img.src = this.makeImgName(img);
     this.x = parseFloat(x); // x coordinate on true scale of background image
     this.y = parseFloat(y); // y coordinate on true scale of background image
-    this.x_canvas = 3.38*this.x
-    this.y_canvas = 4.24*this.y
+    this.x_canvas = 3.3345*this.x // this is the scale between the pixels of the image and the original data
+    this.y_canvas = 3.3345*this.y
 
 }
 
