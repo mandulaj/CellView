@@ -1,9 +1,9 @@
 var CanvasConfig = {
     "offset": {x: 0, y: 0},
-    "cell_img_real_height": 900,
-    "cell_img_real_width": 800,
-    "cell_img_vir_height": 30,
-    "cell_img_vir_width": 30,
+    "cell_img_real_height": 900, //Not Used for Now
+    "cell_img_real_width": 800, //Not Used for Now
+    "cell_img_vir_height": 30, //Not Used for Now
+    "cell_img_vir_width": 30, //Not Used for Now
     
     "dot_size_on_canvas": 6,
     "dot_color_on_canvas": "red",

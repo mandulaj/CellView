@@ -4,40 +4,40 @@
 
 /* CellView - object reperesenting the canvas
  * 
- * CellView.prototype.setup()  - setup object
+ * CellView.prototype.setup()        - setup object
  * CellView.prototype.loadDots(dots) - loads Dot objects into this.dots array form json file
  * CellView.prototype.getMousePos()  - returns mouse coordinates on true scale
  * CellView.prototype.drawDots()     - draws dots corresponding to x,y coordinates from data on canvas
 */
 function CellView(canvas, dot, image) {
     var thisObj = this;
-    this.mouseX = 0;
-    this.mouseY = 0;
-    this.canvas = document.getElementById(canvas); // DOM object of canvas
-    this.dot = document.getElementById(dot);
+    this.mouseX = 0; // Current X position of mouse
+    this.mouseY = 0; // Current Y position of mouse
+    this.canvas = document.getElementById(canvas); // DOM object of cell canvas (this is the main cell)
+    this.dot = document.getElementById(dot); // DOM object of dot canvas (this is the enlarged image of the dot)
     
     this.img = new Image(); // Main background image
-    this.img.src = image; // set the src of background image to image
+    this.img.src = image; // set the src of background image to `image`
     this.dots = []; // Array of Dot objects
     this.setup(); // setup
 }
 
 CellView.prototype.setup = function () {
     var thisObj = this;
-    this.img.onload = function () {
+    this.img.onload = function () { // Initial paint of background image
         var ctx = thisObj.canvas.getContext("2d");
         ctx.drawImage(thisObj.img, 0, 0, thisObj.canvas.width, thisObj.canvas.height);
     };
-    this.canvas.addEventListener("mousemove", function (evt) {
+    this.canvas.addEventListener("mousemove", function (evt) { // Updates the mouseX and mouseY to current mouse position on move of the mouse
         thisObj.mouseX = evt.clientX;
         thisObj.mouseY = evt.clientY;
     });
-    this.canvas.addEventListener("mousedown", function () {
-        var coords_canvas = thisObj.getMousePos(thisObj.mouseX, thisObj.mouseY),
-            i = 0,
-            distmin = thisObj.canvas.width + thisObj.canvas.height,
-            imin = 0,
-            dist = 0;
+    this.canvas.addEventListener("mousedown", function () { // Whenever we click on the cell canvas
+        var coords_canvas = thisObj.getMousePos(thisObj.mouseX, thisObj.mouseY), // Where we clicked
+            i = 0, // index of Dot we are at in loop
+            distmin = thisObj.canvas.width + thisObj.canvas.height, // the minimal distance we have seen
+            imin = 0, // index of Dot in array that is nearest to where we clicked
+            dist = 0; // distance to the Dot we are at in the loop
         
         for (i = 0; i < thisObj.dots.length; i++) {
             dist = thisObj.dots[i].distance(coords_canvas.x,coords_canvas.y);
@@ -48,8 +48,8 @@ CellView.prototype.setup = function () {
         }
         
         var ctx = thisObj.canvas.getContext("2d");
-        ctx.drawImage(thisObj.img, 0, 0, thisObj.canvas.width, thisObj.canvas.height);
-        thisObj.dots[imin].drawSelf(thisObj.canvas, thisObj.dot); // Draw small image of Dot
+        ctx.drawImage(thisObj.img, 0, 0, thisObj.canvas.width, thisObj.canvas.height); // repaint the background
+        thisObj.dots[imin].drawSelf(thisObj.canvas, thisObj.dot); // Draw small image of Dot and a square at the cell canvas
     });
 }
 
@@ -93,7 +93,7 @@ CellView.prototype.drawDots = function()
  *
  * Dot.prototype.makeImgName(imgNum)  -    create path to image
  * Dot.prototype.distance(x,y)     -  returns distance of Dot to x,y
- * 
+ * Dot.prototype.drawSelf(cellCanvas, dotCanvas) - draws a small square on cellCanvas and the image of the Dot on dotCanvas
  */
 function Dot(x,y,img)
 {
