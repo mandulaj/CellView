@@ -124,12 +124,12 @@ function Dot(x,y,img)
 
 Dot.prototype.makeImgName = function(imgNum)
 {
-    var path = "data/w/";
-    var prfix = "w_";
-    var sufix = ".png"
-    var num = "";
+    var path = CanvasConfig.data_path,
+        prfix = CanvasConfig.data_prefix,
+        sufix = CanvasConfig.data_sufix,
+        num = "";
 	
-    for ( var i = 0; i< (5-imgNum.length); i++ )
+    for ( var i = 0; i < (CanvasConfig.data_num_of_0 - imgNum.length); i++ )
     {
         num += "0"
     }
