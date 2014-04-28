@@ -38,22 +38,23 @@ CellView.prototype.setup = function () {
     });
     this.canvas.addEventListener("mousedown", function () {
         var coords_canvas = thisObj.getMousePos(thisObj.mouseX, thisObj.mouseY),
-            i = 0;
-
-		var distmin = thisObj.canvas.width + thisObj.canvas.height;
-		var imin = 0;
+            i = 0,
+            distmin = thisObj.canvas.width + thisObj.canvas.height,
+            imin = 0,
+            dist = 0;
+        
         for (i = 0; i < thisObj.dots.length; i++) {
-        	var dist = thisObj.dots[i].distance(coords_canvas.x,coords_canvas.y);
+            dist = thisObj.dots[i].distance(coords_canvas.x,coords_canvas.y);
         	if (dist < distmin) {
         		distmin = dist;
         		imin = i;         	
         	}
         }
-        console.log(distmin)
-        var ctx = thisObj.dot.getContext("2d");
-        ctx.drawImage(thisObj.dots[imin].img, 0, 0, thisObj.canvas.width, thisObj.canvas.height);
-        console.log(thisObj.dots[imin])
-        console.log(thisObj.dots[imin].x_canvas,thisObj.dots[imin].y_canvas)                                
+        
+        thisObj.dots[imin].drawSelf(thisObj.dot); // Draw small image of Dot
+        
+        //console.log(thisObj.dots[imin])
+        //console.log(thisObj.dots[imin].x_canvas,thisObj.dots[imin].y_canvas)                                
         var x = thisObj.dots[imin].x_canvas;//(thisObj.dots[imin].x +thisObj.offset.x) * thisObj.scaleX;
         var y = thisObj.dots[imin].y_canvas;// + thisObj.offset.y) * thisObj.scaleY;
     	var ctx = thisObj.canvas.getContext("2d");
@@ -155,9 +156,27 @@ Dot.prototype.distance = function(x,y)
   	return Math.sqrt( xs + ys )
 }
 
-Dot.prototype.loadImg = function()
+Dot.prototype.drawSelf = function(canvas)
 {
-    this.img.src = this.this.imgName;
+    if(this.img.width === 0)
+    {
+        thisObj = this;
+        this.img.onload = function()
+        {
+            var ctx = canvas.getContext("2d");
+            ctx.drawImage(thisObj.img, 0, 0, canvas.width, canvas.height);
+            console.log("Image loaded")
+        }
+        this.img.src = this.imgName;
+    }
+    else
+    {
+        
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(this.img, 0, 0, canvas.width, canvas.height);
+    }
+    
+    
 }
 
 var cell = new CellView("cell", "dot","data/wf_loc.png");//,987,786);
