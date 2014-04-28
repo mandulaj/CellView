@@ -53,8 +53,8 @@ CellView.prototype.setup = function () {
     	var ctx = thisObj.canvas.getContext("2d");
         ctx.drawImage(thisObj.img, 0, 0, thisObj.canvas.width, thisObj.canvas.height);
         ctx.fillStyle = "red";
-        var bs = 10
-        ctx.fillRect( x-3, y-3, bs, bs);       
+        var bs = 5
+        ctx.fillRect( x-0, y-0, bs, bs);       
     });
 }
 
@@ -136,6 +136,7 @@ Dot.prototype.makeImgName = function(imgNum)
     return path + prfix + num + sufix;
 }
 
+/* Not Used ----------------------------------------
 Dot.prototype.checkPos = function(x,y,error)
 {
 	var xs = 0;
@@ -152,6 +153,8 @@ Dot.prototype.checkPos = function(x,y,error)
   	return false;
   	}
 
+
+
 Dot.prototype.checkPos2 = function(x,y,error)
 {
     if (Math.abs(this.x-x)< error)
@@ -163,6 +166,7 @@ Dot.prototype.checkPos2 = function(x,y,error)
     }
     return false;
 }
+-----------------------------------------------------*/
 
 Dot.prototype.distance = function(x,y)
 {
