@@ -1,7 +1,7 @@
 //JavaScript
 
 var CanvasConfig = {
-    offset: {x: -8, y: -8},
+    offset: {x: 0, y: 0},
     
 }
 
@@ -78,7 +78,7 @@ CellView.prototype.getMousePos = function(clientX,clientY)
     var rect = this.canvas.getBoundingClientRect();
     var scaleX = this.scaleX;
     var scaleY = this.scaleY;
-    var offset = CanvasConfig.offset;
+    
     var thisObj = this;
     var xy = {
         //x: (clientX - rect.left)/thisObj.boxDimensionX * thisObj.canvas.width / scaleX - offset.x,
@@ -91,7 +91,7 @@ CellView.prototype.getMousePos = function(clientX,clientY)
 //    ctx.drawImage(thisObj.img, 0, 0, thisObj.canvas.width, thisObj.canvas.height);
 //    ctx.fillStyle = "green";
 //    ctx.fillRect( xy.x,xy.y, 10, 10);
-//    console.log(xy.x,xy.y)
+    console.log(xy.x,xy.y)
     return xy;
 }
 
@@ -165,7 +165,6 @@ Dot.prototype.drawSelf = function(canvas)
         {
             var ctx = canvas.getContext("2d");
             ctx.drawImage(thisObj.img, 0, 0, canvas.width, canvas.height);
-            console.log("Image loaded")
         }
         this.img.src = this.imgName;
     }
