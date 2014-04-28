@@ -1,9 +1,5 @@
 //JavaScript
 
-var CanvasConfig = {
-    offset: {x: 0, y: 0},
-    
-}
 
 
 /* CellView - object reperesenting the canvas
