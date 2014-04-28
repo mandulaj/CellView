@@ -118,7 +118,6 @@ function Dot(x,y,img)
 {
     this.img = new Image(); // Enlarged image of the dot
     this.imgName = this.makeImgName(img); // Generate path to dot image
-    this.img.src = this.makeImgName(img);
     this.x = parseFloat(x); // x coordinate on true scale of background image
     this.y = parseFloat(y); // y coordinate on true scale of background image
     this.x_canvas = 3.3345*this.x // this is the scale between the pixels of the image and the original data
@@ -156,6 +155,10 @@ Dot.prototype.distance = function(x,y)
   	return Math.sqrt( xs + ys )
 }
 
+Dot.prototype.loadImg = function()
+{
+    this.img.src = this.this.imgName;
+}
 
 var cell = new CellView("cell", "dot","data/wf_loc.png");//,987,786);
 cell.loadDots(Cell_data);
