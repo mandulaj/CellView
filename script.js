@@ -111,7 +111,7 @@ CellView.prototype.drawDots = function()
 /* Object representing each dot
  *
  * Dot.prototype.makeImgName(imgNum)  -    create path to image
- * Dot.prototype.checkPos(x,y,error)     -  return true if x and y are in the error range of this.x and this.y
+ * Dot.prototype.distance(x,y)     -  returns distance of Dot to x,y
  * 
  */
 function Dot(x,y,img)
@@ -142,37 +142,6 @@ Dot.prototype.makeImgName = function(imgNum)
     return path + prfix + num + sufix;
 }
 
-/* Not Used ----------------------------------------
-Dot.prototype.checkPos = function(x,y,error)
-{
-	var xs = 0;
-  	var ys = 0;
- 
-  	xs = this.x_canvas - x;
-  	xs = xs * xs;
-  	ys = this.y_canvas - y;
-  	ys = ys * ys; 
-  	if (Math.sqrt( xs + ys ) < error)
-  	{
-  		return true;
-  	}
-  	return false;
-  	}
-
-
-
-Dot.prototype.checkPos2 = function(x,y,error)
-{
-    if (Math.abs(this.x-x)< error)
-    {
-        if (Math.abs(this.y-y)< error )
-        {
-            return true;
-        }
-    }
-    return false;
-}
------------------------------------------------------*/
 
 Dot.prototype.distance = function(x,y)
 {
