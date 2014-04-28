@@ -47,17 +47,9 @@ CellView.prototype.setup = function () {
         	}
         }
         
-        thisObj.dots[imin].drawSelf(thisObj.dot); // Draw small image of Dot
-        
-        //console.log(thisObj.dots[imin])
-        //console.log(thisObj.dots[imin].x_canvas,thisObj.dots[imin].y_canvas)                                
-        var x = thisObj.dots[imin].x_canvas;//(thisObj.dots[imin].x +thisObj.offset.x) * thisObj.scaleX;
-        var y = thisObj.dots[imin].y_canvas;// + thisObj.offset.y) * thisObj.scaleY;
-    	var ctx = thisObj.canvas.getContext("2d");
+        var ctx = thisObj.canvas.getContext("2d");
         ctx.drawImage(thisObj.img, 0, 0, thisObj.canvas.width, thisObj.canvas.height);
-        ctx.fillStyle = "red";
-        var bs = 5
-        ctx.fillRect( x-0, y-0, bs, bs);       
+        thisObj.dots[imin].drawSelf(thisObj.canvas, thisObj.dot); // Draw small image of Dot
     });
 }
 
@@ -77,17 +69,9 @@ CellView.prototype.getMousePos = function(clientX,clientY)
     
     var thisObj = this;
     var xy = {
-        //x: (clientX - rect.left)/thisObj.boxDimensionX * thisObj.canvas.width / scaleX - offset.x,
-        //y: (clientY - rect.top)/thisObj.boxDimensionY * thisObj.canvas.height / scaleY - offset.y
-        x: clientX - rect.left + CanvasConfig.offset.x,//(clientX - rect.left)/thisObj.canvas.width*scaleX,// - offset.x,
-        y: clientY - rect.top + CanvasConfig.offset.y//(clientY - rect.top)/thisObj.canvas.height*scaleY// - offset.y
-
+        x: clientX - rect.left + CanvasConfig.offset.x,
+        y: clientY - rect.top + CanvasConfig.offset.y
     };
-    var ctx = thisObj.canvas.getContext("2d");
-//    ctx.drawImage(thisObj.img, 0, 0, thisObj.canvas.width, thisObj.canvas.height);
-//    ctx.fillStyle = "green";
-//    ctx.fillRect( xy.x,xy.y, 10, 10);
-    console.log(xy.x,xy.y)
     return xy;
 }
 
@@ -152,25 +136,29 @@ Dot.prototype.distance = function(x,y)
   	return Math.sqrt( xs + ys )
 }
 
-Dot.prototype.drawSelf = function(canvas)
+Dot.prototype.drawSelf = function(cellCanvas, dotCanvas)
 {
     if(this.img.width === 0)
     {
         thisObj = this;
         this.img.onload = function()
         {
-            var ctx = canvas.getContext("2d");
-            ctx.drawImage(thisObj.img, 0, 0, canvas.width, canvas.height);
+            var ctx = dotCanvas.getContext("2d");
+            ctx.drawImage(thisObj.img, 0, 0, dotCanvas.width, dotCanvas.height);
         }
         this.img.src = this.imgName;
     }
     else
     {
         
-        var ctx = canvas.getContext("2d");
-        ctx.drawImage(this.img, 0, 0, canvas.width, canvas.height);
+        var ctx = dotCanvas.getContext("2d");
+        ctx.drawImage(this.img, 0, 0, dotCanvas.width, dotCanvas.height);
     }
     
+    var ctx = cellCanvas.getContext("2d");
+    ctx.fillStyle = CanvasConfig.dot_color_on_canvas;
+    var bs = CanvasConfig.dot_size_on_canvas;
+    ctx.fillRect( this.x_canvas + CanvasConfig.dot_offset_on_canvas.x, this.y_canvas + CanvasConfig.dot_offset_on_canvas.y, bs, bs);   
     
 }
 
