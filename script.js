@@ -1,7 +1,7 @@
 //JavaScript
 
 var CanvasConfig = {
-    offset: {x: -8., y: -8.},
+    offset: {x: -8, y: -8},
     
 }
 
@@ -49,6 +49,7 @@ CellView.prototype.setup = function () {
         		imin = i;         	
         	}
         }
+        console.log(distmin)
         var ctx = thisObj.dot.getContext("2d");
         ctx.drawImage(thisObj.dots[imin].img, 0, 0, thisObj.canvas.width, thisObj.canvas.height);
         console.log(thisObj.dots[imin])
@@ -178,9 +179,10 @@ Dot.prototype.distance = function(x,y)
 	var xs = 0;
   	var ys = 0;
  
-  	xs = this.x_canvas - x;
+  	xs = this.x_canvas - x + CanvasConfig.offset.x;
+    
   	xs = xs * xs;
-  	ys = this.y_canvas - y;
+  	ys = this.y_canvas - y + CanvasConfig.offset.y;
   	ys = ys * ys; 
   	return Math.sqrt( xs + ys )
 }
