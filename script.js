@@ -1,5 +1,11 @@
 //JavaScript
 
+var CanvasConfig = {
+    offset: {x: -8., y: -8.},
+    
+}
+
+
 /* CellView - object reperesenting the canvas
  * 
  * CellView.prototype.setup()  - setup object
@@ -18,7 +24,6 @@ function CellView(canvas, dot, image) {
     this.img.src = image; // set the src of background image to image
     this.dots = []; // Array of Dot objects
     this.setup(); // setup
-    this.offset = {x: -8., y: -8.}; // DEBUG: offset
 }
 
 CellView.prototype.setup = function () {
@@ -71,13 +76,13 @@ CellView.prototype.getMousePos = function(clientX,clientY)
     var rect = this.canvas.getBoundingClientRect();
     var scaleX = this.scaleX;
     var scaleY = this.scaleY;
-    var offset = this.offset;
+    var offset = CanvasConfig.offset;
     var thisObj = this;
     var xy = {
         //x: (clientX - rect.left)/thisObj.boxDimensionX * thisObj.canvas.width / scaleX - offset.x,
         //y: (clientY - rect.top)/thisObj.boxDimensionY * thisObj.canvas.height / scaleY - offset.y
-        x: clientX - rect.left + this.offset.x,//(clientX - rect.left)/thisObj.canvas.width*scaleX,// - offset.x,
-        y: clientY - rect.top + this.offset.y//(clientY - rect.top)/thisObj.canvas.height*scaleY// - offset.y
+        x: clientX - rect.left + CanvasConfig.offset.x,//(clientX - rect.left)/thisObj.canvas.width*scaleX,// - offset.x,
+        y: clientY - rect.top + CanvasConfig.offset.y//(clientY - rect.top)/thisObj.canvas.height*scaleY// - offset.y
 
     };
     var ctx = thisObj.canvas.getContext("2d");
