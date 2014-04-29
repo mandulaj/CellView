@@ -11,6 +11,7 @@ var CanvasConfig = {
         x: -1,                     
         y: -1
     },
+    "rect_color_on_canvas": "green",
     
     "data_path": "data/w/",
     "data_prefix" : "w_",
