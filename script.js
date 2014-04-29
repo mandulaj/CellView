@@ -25,13 +25,13 @@ function dataParser(array) //Generates a nice object with which the work is easy
  * CellView.prototype.getMousePos()  - returns mouse coordinates on true scale
  * CellView.prototype.drawDots()     - draws dots corresponding to x,y coordinates from data on canvas
 */
-function CellView(canvas, dot, image) {
+function CellView(canvas, dot, psf, image) {
     var thisObj = this;
     this.mouseX = 0; // Current X position of mouse
     this.mouseY = 0; // Current Y position of mouse
     this.canvas = document.getElementById(canvas); // DOM object of cell canvas (this is the main cell)
     this.dot = document.getElementById(dot); // DOM object of dot canvas (this is the enlarged image of the dot)
-    
+    this.psf = document.getElementById(psf)
     this.img = new Image(); // Main background image
     this.img.src = image; // set the src of background image to `image`
     this.dots = []; // Array of Dot objects
@@ -65,7 +65,7 @@ CellView.prototype.setup = function () {
         
         var ctx = thisObj.canvas.getContext("2d");
         ctx.drawImage(thisObj.img, 0, 0, thisObj.canvas.width, thisObj.canvas.height); // repaint the background
-        thisObj.dots[imin].drawSelf(thisObj.canvas, thisObj.dot); // Draw small image of Dot and a square at the cell canvas
+        thisObj.dots[imin].drawSelf(thisObj.canvas, thisObj.dot, thisObj.psf); // Draw small image of Dot and a square at the cell canvas
     });
 }
 
@@ -168,7 +168,7 @@ Dot.prototype.distance = function(x,y)
   	return Math.sqrt( xs + ys )
 }
 
-Dot.prototype.drawSelf = function(cellCanvas, dotCanvas)
+Dot.prototype.drawSelf = function(cellCanvas, dotCanvas, psfCanvas)
 {
     if(this.img.width === 0)
     {
@@ -199,9 +199,11 @@ Dot.prototype.drawSelf = function(cellCanvas, dotCanvas)
     ctx.rect(this.rect.x1,this.rect.y1,this.rect.x2,this.rect.y2); 
     ctx.stroke();
     
-    
+    document.getElementById("fpn").innerHTML = this.ax_pos;
+    document.getElementById("brn").innerHTML = this.brightness;
+    document.getElementById("ren").innerHTML = this.correl;
 }
 
-var cell = new CellView("cell", "dot","data/wf_loc.png");//,987,786);
+var cell = new CellView("cell", "dot", "psf", "data/wf_loc.png");//,987,786);
 cell.loadDots(Cell_data);
 
