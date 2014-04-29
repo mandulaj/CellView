@@ -17,4 +17,9 @@ var CanvasConfig = {
     "data_prefix" : "w_",
     "data_sufix": ".png",
     "data_num_of_0": 5,
+    
+    "psf_path": "data/psf/",
+    "psf_prefix" : "psf_",
+    "psf_sufix": ".png",
+    "psf_num_of_0": 3,
 }
