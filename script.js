@@ -126,10 +126,10 @@ function Dot(specs)
     this.eval_index = specs.eval_index;
     
     this.rect = {
-        x1:  specs.sqr_x1,
-        y1:  specs.sqr_y1,
-        x2:  specs.sqr_x2,
-        y2:  specs.sqr_y2
+        x1:  3.3345 *specs.sqr_x1,
+        y1:  3.3345 *specs.sqr_y1,
+        x2:  3.3345 *specs.sqr_x2,
+        y2:  3.3345 *specs.sqr_y2
     };
     
     
@@ -193,14 +193,13 @@ Dot.prototype.drawSelf = function(cellCanvas, dotCanvas)
     ctx.fillRect( this.x_canvas + CanvasConfig.dot_offset_on_canvas.x, this.y_canvas + CanvasConfig.dot_offset_on_canvas.y, bs, bs);
     ctx.stroke();
     
-    if (this.rect !== 0)
-    {
-        ctx.beginPath();
-        ctx.lineWidth="2";
-        ctx.strokeStyle = CanvasConfig.rect_color_on_canvas;
-        ctx.rect(this.rect.x1,this.rect.y1,this.rect.x2,this.rect.y2); 
-        ctx.stroke();
-    }
+    ctx.beginPath();
+    ctx.lineWidth="2";
+    ctx.strokeStyle = CanvasConfig.rect_color_on_canvas;
+    ctx.rect(this.rect.x1,this.rect.y1,this.rect.x2,this.rect.y2); 
+    ctx.stroke();
+    
+    
 }
 
 var cell = new CellView("cell", "dot","data/wf_loc.png");//,987,786);
