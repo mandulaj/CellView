@@ -18,7 +18,7 @@ function dataParser(array) //Generates a nice object with which the work is easy
     
 }
 
-/* CellView - object reperesenting the canvas
+/* CellView - object representing the canvas
  * 
  * CellView.prototype.setup()        - setup object
  * CellView.prototype.loadDots(dots) - loads Dot objects into this.dots array form json file
@@ -107,9 +107,9 @@ CellView.prototype.drawDots = function()
 
 /* Object representing each dot
  *
- * Dot.prototype.makeImgName(imgNum)  -    create path to image
+ * Dot.prototype.makeImgName(imgNum, dot)  -    create path to image if dot is true of undef ? dot image : psf image 
  * Dot.prototype.distance(x,y)     -  returns distance of Dot to x,y
- * Dot.prototype.drawSelf(cellCanvas, dotCanvas) - draws a small square on cellCanvas and the image of the Dot on dotCanvas
+ * Dot.prototype.drawSelf(cellCanvas, dotCanvas, psfCanvas) - draws a small square on cellCanvas and the image of the Dot on dotCanvas and psf on psfCanvas
  */
 function Dot(specs)
 {
@@ -120,12 +120,11 @@ function Dot(specs)
     this.x          = parseFloat( specs.dot_x ); // x coordinate on true scale of background image
     this.y          = parseFloat( specs.dot_y ); // y coordinate on true scale of background image
     
-    this.ax_pos     = specs.ax_pos;
-    this.brightness = specs.brightness;
-    this.correl     = specs.correl;
-    this.eval_index = specs.eval_index;
-    console.log(this.eval_index)
-    this.psf_img    = new Image();
+    this.ax_pos     = specs.ax_pos; // axial position (index of image and 1/50 of nm Focus plane)
+    this.brightness = specs.brightness; // brightness
+    this.correl     = specs.correl; // reliability
+    this.eval_index = specs.eval_index; // ?????
+    this.psf_img    = new Image(); // Image of psf
     
     this.rect = {
         x1:  3.3345 *specs.sqr_x1,
@@ -142,6 +141,8 @@ function Dot(specs)
 
 Dot.prototype.makeImgName = function(imgNum, dot)
 {
+    // In case of the actual image of a dot `dot` can be left undefined or true
+    // This constructs the image name using the dot_xxxxxxx config
     if (typeof dot === "undefined" || dot)
     {
         var path = CanvasConfig.data_path,
@@ -153,7 +154,7 @@ Dot.prototype.makeImgName = function(imgNum, dot)
             num += "0"
         }
     }
-    else
+    else // If dot is set explicitly to false, we will use the config for psf and construct a psf version of the img name.
     {
         var path = CanvasConfig.psf_path,
             prfix = CanvasConfig.psf_prefix,
@@ -187,54 +188,60 @@ Dot.prototype.distance = function(x,y)
 
 Dot.prototype.drawSelf = function(cellCanvas, dotCanvas, psfCanvas)
 {
-    if(this.img.width === 0)
+    if(this.img.width === 0) // Load dot image only if not yet loaded
     {
         thisObj = this;
-        this.img.onload = function()
+        this.img.onload = function() // Only draw it when it has finished loading
         {
             var ctx = dotCanvas.getContext("2d");
-            ctx.drawImage(thisObj.img, 0, 0, dotCanvas.width, dotCanvas.height);
+            ctx.drawImage(thisObj.img, 0, 0, dotCanvas.width, dotCanvas.height); // Draw it on the canvas
         }
         this.img.src = this.imgName;
     }
     else
     {
         var ctx = dotCanvas.getContext("2d");
-        ctx.drawImage(this.img, 0, 0, dotCanvas.width, dotCanvas.height);
+        ctx.drawImage(this.img, 0, 0, dotCanvas.width, dotCanvas.height); // Draw it on the canvas
     }
     
-    var ctx = cellCanvas.getContext("2d");
-    ctx.fillStyle = CanvasConfig.dot_color_on_canvas;
-    var bs = CanvasConfig.dot_size_on_canvas;
-    ctx.fillRect( this.x_canvas + CanvasConfig.dot_offset_on_canvas.x, this.y_canvas + CanvasConfig.dot_offset_on_canvas.y, bs, bs);
-    ctx.stroke();
-    
-    ctx.beginPath();
-    ctx.lineWidth="2";
-    ctx.strokeStyle = CanvasConfig.rect_color_on_canvas;
-    ctx.rect(this.rect.x1,this.rect.y1,this.rect.x2,this.rect.y2); 
-    ctx.stroke();
-    
-    document.getElementById("fpn").innerHTML = this.ax_pos * 50;
-    document.getElementById("brn").innerHTML = this.brightness;
-    document.getElementById("ren").innerHTML = this.correl;
-    
-    if(this.psf_img.width === 0)
+    if(this.psf_img.width === 0) // Load psf image only if not yet loaded
     {
         thisObj = this;
-        this.psf_img.onload = function()
+        this.psf_img.onload = function() // Only draw it when it has finished loading
         {
             var ctx = psfCanvas.getContext("2d");
-            ctx.drawImage(thisObj.psf_img, 0, 0, dotCanvas.width, dotCanvas.height);
+            ctx.drawImage(thisObj.psf_img, 0, 0, dotCanvas.width, dotCanvas.height); // Draw it on the canvas
         }
-        this.psf_img.src = this.makeImgName(this.ax_pos, false);
-        console.log( this.psf_img.src)
+        this.psf_img.src = this.makeImgName(this.ax_pos, false); // Draw it on the canvas
     }
     else
     {
         var ctx = psfCanvas.getContext("2d");
         ctx.drawImage(this.psf_img, 0, 0, dotCanvas.width, dotCanvas.height);
     } 
+    
+    
+    // Draw small red dot on the canvas highlighting the dot
+    var ctx = cellCanvas.getContext("2d");
+    ctx.fillStyle = CanvasConfig.dot_color_on_canvas;
+    var bs = CanvasConfig.dot_size_on_canvas;
+    ctx.fillRect( this.x_canvas + CanvasConfig.dot_offset_on_canvas.x, this.y_canvas + CanvasConfig.dot_offset_on_canvas.y, bs, bs);
+    ctx.stroke();
+    
+    // Draw the green square showing the par of image that the enlargement is showing
+    ctx.beginPath();
+    ctx.lineWidth="2";
+    ctx.strokeStyle = CanvasConfig.rect_color_on_canvas;
+    ctx.rect(this.rect.x1,this.rect.y1,this.rect.x2 - this.rect.x1,this.rect.y2 - this.rect.y1); 
+    ctx.stroke();
+    
+    
+    // Set the text values to that of this Dot
+    document.getElementById("fpn").innerHTML = this.ax_pos * 50;
+    document.getElementById("brn").innerHTML = this.brightness;
+    document.getElementById("ren").innerHTML = this.correl;
+    
+    
 }
 
 var cell = new CellView("cell", "dot", "psf", "data/wf_loc.png");//,987,786);
