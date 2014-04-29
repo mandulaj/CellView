@@ -1,5 +1,4 @@
 //JavaScript
-
 function dataParser(array) //Generates a nice object with which the work is easy
 {
     return {
@@ -14,8 +13,7 @@ function dataParser(array) //Generates a nice object with which the work is easy
         sqr_y1:     array[7],
         sqr_x2:     array[10],
         sqr_y2:     array[9]
-    }
-    
+    } 
 }
 
 /* CellView - object representing the canvas
@@ -65,6 +63,8 @@ CellView.prototype.setup = function () {
         
         var ctx = thisObj.canvas.getContext("2d");
         ctx.drawImage(thisObj.img, 0, 0, thisObj.canvas.width, thisObj.canvas.height); // repaint the background
+        
+        ctx.stroke();
         thisObj.dots[imin].drawSelf(thisObj.canvas, thisObj.dot, thisObj.psf); // Draw small image of Dot and a square at the cell canvas
     });
 }
@@ -73,7 +73,7 @@ CellView.prototype.loadDots = function(array)
 {
 	for (var i = 0; i < array.length; i++ )
 	{
-		this.dots.push(new Dot(dataParser(array[i])))
+		this.dots.push(new Dot(dataParser(array[i]), this))
 	}
 }
 
@@ -111,7 +111,7 @@ CellView.prototype.drawDots = function()
  * Dot.prototype.distance(x,y)     -  returns distance of Dot to x,y
  * Dot.prototype.drawSelf(cellCanvas, dotCanvas, psfCanvas) - draws a small square on cellCanvas and the image of the Dot on dotCanvas and psf on psfCanvas
  */
-function Dot(specs)
+function Dot(specs,cell)
 {
     
     this.img        = new Image(); // Enlarged image of the dot
@@ -133,6 +133,7 @@ function Dot(specs)
         y2:  3.3345 *specs.sqr_y2
     };
     
+    this.cell = cell;
     
     this.x_canvas = 3.3345 * this.x // this is the scale between the pixels of the image and the original data
     this.y_canvas = 3.3345 * this.y
@@ -220,21 +221,20 @@ Dot.prototype.drawSelf = function(cellCanvas, dotCanvas, psfCanvas)
         ctx.drawImage(this.psf_img, 0, 0, dotCanvas.width, dotCanvas.height);
     } 
     
-    
     // Draw small red dot on the canvas highlighting the dot
     var ctx = cellCanvas.getContext("2d");
-    ctx.fillStyle = CanvasConfig.dot_color_on_canvas;
-    var bs = CanvasConfig.dot_size_on_canvas;
-    ctx.fillRect( this.x_canvas + CanvasConfig.dot_offset_on_canvas.x, this.y_canvas + CanvasConfig.dot_offset_on_canvas.y, bs, bs);
-    ctx.stroke();
+    ctx.drawImage(this.cell.img ,0, 0, this.cell.canvas.width, this.cell.canvas.height)
     
     // Draw the green square showing the par of image that the enlargement is showing
     ctx.beginPath();
     ctx.lineWidth="2";
     ctx.strokeStyle = CanvasConfig.rect_color_on_canvas;
     ctx.rect(this.rect.x1,this.rect.y1,this.rect.x2 - this.rect.x1,this.rect.y2 - this.rect.y1); 
-    ctx.stroke();
     
+    ctx.fillStyle = CanvasConfig.dot_color_on_canvas;
+    var bs = CanvasConfig.dot_size_on_canvas;
+    ctx.fillRect( this.x_canvas + CanvasConfig.dot_offset_on_canvas.x, this.y_canvas + CanvasConfig.dot_offset_on_canvas.y, bs, bs);
+    ctx.stroke();
     
     // Set the text values to that of this Dot
     document.getElementById("fpn").innerHTML = this.ax_pos * 50;
