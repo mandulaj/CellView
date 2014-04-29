@@ -1,6 +1,22 @@
 //JavaScript
 
-
+function dataParser(array) //Generates a nice object with which the work is easy
+{
+    return {
+        img_index:  array[0],
+        dot_x:      array[2],
+        dot_y:      array[1],
+        ax_pos:     array[3],
+        brightness: array[4],
+        correl:     array[5],
+        eval_index: array[6],
+        sqr_x1:     array[8],
+        sqr_y1:     array[7],
+        sqr_x2:     array[10],
+        sqr_y2:     array[9]
+    }
+    
+}
 
 /* CellView - object reperesenting the canvas
  * 
@@ -95,8 +111,22 @@ CellView.prototype.drawDots = function()
  * Dot.prototype.distance(x,y)     -  returns distance of Dot to x,y
  * Dot.prototype.drawSelf(cellCanvas, dotCanvas) - draws a small square on cellCanvas and the image of the Dot on dotCanvas
  */
-function Dot(x,y,img)
+function Dot(x,y,img,rect)
 {
+    if (typeof rect === "undefined")
+    {
+        this.rect = {
+            x1: 0,
+            y1: 0,
+            x2: 100,
+            y2: 100
+        };
+        this.rect = 0
+    }
+    else
+    {
+        this.rect = rect;
+    }
     this.img = new Image(); // Enlarged image of the dot
     this.imgName = this.makeImgName(img); // Generate path to dot image
     this.x = parseFloat(x); // x coordinate on true scale of background image
@@ -158,8 +188,17 @@ Dot.prototype.drawSelf = function(cellCanvas, dotCanvas)
     var ctx = cellCanvas.getContext("2d");
     ctx.fillStyle = CanvasConfig.dot_color_on_canvas;
     var bs = CanvasConfig.dot_size_on_canvas;
-    ctx.fillRect( this.x_canvas + CanvasConfig.dot_offset_on_canvas.x, this.y_canvas + CanvasConfig.dot_offset_on_canvas.y, bs, bs);   
+    ctx.fillRect( this.x_canvas + CanvasConfig.dot_offset_on_canvas.x, this.y_canvas + CanvasConfig.dot_offset_on_canvas.y, bs, bs);
+    ctx.stroke();
     
+    if (this.rect !== 0)
+    {
+        ctx.beginPath();
+        ctx.lineWidth="2";
+        ctx.strokeStyle = CanvasConfig.rect_color_on_canvas;
+        ctx.rect(this.rect.x1,this.rect.y1,this.rect.x2,this.rect.y2); 
+        ctx.stroke();
+    }
 }
 
 var cell = new CellView("cell", "dot","data/wf_loc.png");//,987,786);
