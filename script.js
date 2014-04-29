@@ -124,6 +124,8 @@ function Dot(specs)
     this.brightness = specs.brightness;
     this.correl     = specs.correl;
     this.eval_index = specs.eval_index;
+    console.log(this.eval_index)
+    this.psf_img    = new Image();
     
     this.rect = {
         x1:  3.3345 *specs.sqr_x1,
@@ -138,20 +140,35 @@ function Dot(specs)
 
 }
 
-Dot.prototype.makeImgName = function(imgNum)
+Dot.prototype.makeImgName = function(imgNum, dot)
 {
-    var path = CanvasConfig.data_path,
-        prfix = CanvasConfig.data_prefix,
-        sufix = CanvasConfig.data_sufix,
-        num = "";
-	
-    for ( var i = 0; i < (CanvasConfig.data_num_of_0 - imgNum.length); i++ )
+    if (typeof dot === "undefined" || dot)
     {
-        num += "0"
+        var path = CanvasConfig.data_path,
+            prfix = CanvasConfig.data_prefix,
+            sufix = CanvasConfig.data_sufix,
+            num = "";
+        for ( var i = 0; i < (CanvasConfig.data_num_of_0 - imgNum.length); i++ )
+        {
+            num += "0"
+        }
     }
+    else
+    {
+        var path = CanvasConfig.psf_path,
+            prfix = CanvasConfig.psf_prefix,
+            sufix = CanvasConfig.psf_sufix,
+            num = "";
+        for ( var i = 0; i < (CanvasConfig.psf_num_of_0 - imgNum.length); i++ )
+        {
+            num += "0"
+        }
+    }
+    
+    
     num += imgNum;
-	
     return path + prfix + num + sufix;
+    
 }
 
 
@@ -182,7 +199,6 @@ Dot.prototype.drawSelf = function(cellCanvas, dotCanvas, psfCanvas)
     }
     else
     {
-        
         var ctx = dotCanvas.getContext("2d");
         ctx.drawImage(this.img, 0, 0, dotCanvas.width, dotCanvas.height);
     }
@@ -199,9 +215,26 @@ Dot.prototype.drawSelf = function(cellCanvas, dotCanvas, psfCanvas)
     ctx.rect(this.rect.x1,this.rect.y1,this.rect.x2,this.rect.y2); 
     ctx.stroke();
     
-    document.getElementById("fpn").innerHTML = this.ax_pos;
+    document.getElementById("fpn").innerHTML = this.ax_pos * 50;
     document.getElementById("brn").innerHTML = this.brightness;
     document.getElementById("ren").innerHTML = this.correl;
+    
+    if(this.psf_img.width === 0)
+    {
+        thisObj = this;
+        this.psf_img.onload = function()
+        {
+            var ctx = psfCanvas.getContext("2d");
+            ctx.drawImage(thisObj.psf_img, 0, 0, dotCanvas.width, dotCanvas.height);
+        }
+        this.psf_img.src = this.makeImgName(this.ax_pos, false);
+        console.log( this.psf_img.src)
+    }
+    else
+    {
+        var ctx = psfCanvas.getContext("2d");
+        ctx.drawImage(this.psf_img, 0, 0, dotCanvas.width, dotCanvas.height);
+    } 
 }
 
 var cell = new CellView("cell", "dot", "psf", "data/wf_loc.png");//,987,786);
