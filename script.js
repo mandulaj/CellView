@@ -73,7 +73,7 @@ CellView.prototype.loadDots = function(array)
 {
 	for (var i = 0; i < array.length; i++ )
 	{
-		this.dots.push(new Dot(array[i][2], array[i][1], array[i][0]))
+		this.dots.push(new Dot(dataParser(array[i])))
 	}
 }
 
@@ -111,28 +111,30 @@ CellView.prototype.drawDots = function()
  * Dot.prototype.distance(x,y)     -  returns distance of Dot to x,y
  * Dot.prototype.drawSelf(cellCanvas, dotCanvas) - draws a small square on cellCanvas and the image of the Dot on dotCanvas
  */
-function Dot(x,y,img,rect)
+function Dot(specs)
 {
-    if (typeof rect === "undefined")
-    {
-        this.rect = {
-            x1: 0,
-            y1: 0,
-            x2: 100,
-            y2: 100
-        };
-        this.rect = 0
-    }
-    else
-    {
-        this.rect = rect;
-    }
-    this.img = new Image(); // Enlarged image of the dot
-    this.imgName = this.makeImgName(img); // Generate path to dot image
-    this.x = parseFloat(x); // x coordinate on true scale of background image
-    this.y = parseFloat(y); // y coordinate on true scale of background image
-    this.x_canvas = 3.3345*this.x // this is the scale between the pixels of the image and the original data
-    this.y_canvas = 3.3345*this.y
+    
+    this.img        = new Image(); // Enlarged image of the dot
+    this.imgName    = this.makeImgName( specs.img_index ); // Generate path to dot image
+    
+    this.x          = parseFloat( specs.dot_x ); // x coordinate on true scale of background image
+    this.y          = parseFloat( specs.dot_y ); // y coordinate on true scale of background image
+    
+    this.ax_pos     = specs.ax_pos;
+    this.brightness = specs.brightness;
+    this.correl     = specs.correl;
+    this.eval_index = specs.eval_index;
+    
+    this.rect = {
+        x1:  specs.sqr_x1,
+        y1:  specs.sqr_y1,
+        x2:  specs.sqr_x2,
+        y2:  specs.sqr_y2
+    };
+    
+    
+    this.x_canvas = 3.3345 * this.x // this is the scale between the pixels of the image and the original data
+    this.y_canvas = 3.3345 * this.y
 
 }
 
