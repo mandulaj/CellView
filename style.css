@@ -3,38 +3,56 @@ html, body {
     padding: 0;
     margin: 0;
     height: 100%;
+    width: 100%;
 }
 
-.main {
-    width: 100%
+#head {
+    width: 100%;
+    height: 100px;
+    line-height: 100px;
+    
+    background-image: -webkit-gradient(
+	linear,
+	right top,
+	left bottom,
+	color-stop(0, rgba(0, 98, 255,1)),
+	color-stop(1, rgba(102, 12, 212,1))
+);
+background-image: -o-linear-gradient(left bottom, rgb(0, 98, 255) 0%, rgb(102, 12, 212) 100%);
+background-image: -moz-linear-gradient(left bottom, rgb(0, 98, 255) 0%, rgb(102, 12, 212) 100%);
+background-image: -webkit-linear-gradient(left bottom, rgb(0, 98, 255) 0%, rgb(102, 12, 212) 100%);
+background-image: -ms-linear-gradient(left bottom, rgb(0, 98, 255) 0%, rgb(102, 12, 212) 100%);
+background-image: linear-gradient(to left bottom, rgb(0, 98, 255) 0%, rgb(102, 12, 212) 100%);
+}
+#head h1 {
+    margin-top: 0;
+    color: #FFF;
+    text-align: center;
+}
+
+.main>div {
+    width: 100%;
 }
 
 canvas {
-    width: 987px;
-    height: 786px;
-    float: left;
+    width: 100%;
+    height: auto;
     margin: 10px;
 }
 
-canvas_nonsquare {
-    width: 987px;
-    height: 786px;
-    border: 1px solid black;
+.img_title {
+    text-align: center;
 }
 
-canvas_small {
-    width: 200px;
-    height: 200px;
-    border: 1px solid black;
+#numbers span {
+    font-size: 20px;
 }
 
-#dot{
-	width: 400px;
-	height: 400px; 
-	
+.info_title{
+    font-weight: bold;
+    text-align: left;
 }
 
-#psf {
-    width: 400px;
-    height: 400px;
+.info_value {
+    text-align: right;
 }
