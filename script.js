@@ -97,7 +97,7 @@ CellView.prototype.setup = function () {
         thisObj.dots[imin].drawSelf(thisObj.canvas, thisObj.dot, thisObj.psf); // Draw small image of Dot and a square at the cell canvas
     });
     
-    window.onresize = function() // We must update some of these valuse when we resize the window (css width/height changes)
+    window.onresize = function() // We must update some of these values when we resize the window (css width/height changes)
     {
         thisObj.sizes = {
             canvas: {
@@ -298,6 +298,6 @@ Dot.prototype.drawSelf = function(cellCanvas, dotCanvas, psfCanvas)
     
 }
 
-var cell = new CellView("cell", "dot", "psf", "data/wf_loc.png");//,987,786);
+var cell = new CellView("cell", "dot", "psf", "data/wf_loc.png");
 cell.loadDots(Cell_data);
 
