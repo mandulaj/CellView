@@ -41,3 +41,22 @@ This is a simple HTML5 web app using `Canvas` and `Javascript` to enhance the us
     }
     ```
 4. Fire up the index.html and enjoy the clicking :)
+
+
+## Set up of data
+The way we read the data is still experimental. We decided to load it as a JavaScript array of arrays. 
+The data is in `data/coord.js` Essentially it is a JavaScript script that declares a global variable `Cell_data`. It holds and array of arrays. Each array in the array is one dot. The positions in the inner array are the values for the dot.
+Here are the positions and their meaning:
+
+1. index of the coordinate (and image)
+2. vertical position
+3. horizontal position
+4. axial position (defocus)
+5. brightness 
+6. correlation coefficient (reliability)
+7. evaluation index 
+8. upper left corner - vertical
+9. upper left corner - horizontal
+10. lower right corner - vertical
+11. lower right corner - horizontal
+  
