@@ -1,4 +1,6 @@
 //JavaScript
+
+
 function dataParser(array) //Generates a nice object with which the work is easy
 {
     return {
@@ -34,6 +36,33 @@ function CellView(canvas, dot, psf, image) {
     this.img.src = image; // set the src of background image to `image`
     this.dots = []; // Array of Dot objects
     this.setup(); // setup
+    
+    this.canvas.width  = CanvasConfig.cell_img_real_width; // set the size of canvas to the correct values at the top of the program
+    this.canvas.height = CanvasConfig.cell_img_real_height;
+    
+    
+    this.sizes = {
+        canvas: { // The real width of the bg png
+            x: this.canvas.width,
+            y: this.canvas.height
+        },
+        canvas_virt: { // Number of pixels in the experiment (virtual pixel)
+            x: CanvasConfig.cell_img_vir_width,
+            y: CanvasConfig.cell_img_vir_height
+        },
+        canvas_css: { // The width specified by css (50% -> Npx)
+            x: this.canvas.offsetWidth,
+            y: this.canvas.offsetHeight
+        },
+        scale_click: { // Scale for clicking (changes when we resize window)
+            x: this.canvas.offsetWidth / this.canvas.width,
+            y: this.canvas.offsetHeight / this.canvas.height
+        },
+        scale_draw: { // Scale for drawing (does not change when we resize the window (only if we change pictures))
+            x: this.canvas.width / CanvasConfig.cell_img_vir_width,
+            y: this.canvas.height / CanvasConfig.cell_img_vir_height
+        }
+    }
 }
 
 CellView.prototype.setup = function () {
@@ -67,26 +96,50 @@ CellView.prototype.setup = function () {
         ctx.stroke();
         thisObj.dots[imin].drawSelf(thisObj.canvas, thisObj.dot, thisObj.psf); // Draw small image of Dot and a square at the cell canvas
     });
+    
+    window.onresize = function() // We must update some of these valuse when we resize the window (css width/height changes)
+    {
+        thisObj.sizes = {
+            canvas: {
+                x: thisObj.canvas.width,
+                y: thisObj.canvas.height
+            },
+            canvas_virt: {
+                x: CanvasConfig.cell_img_vir_width,
+                y: CanvasConfig.cell_img_vir_height
+            },
+            canvas_css: {
+                x: thisObj.canvas.offsetWidth,
+                y: thisObj.canvas.offsetHeight
+            },
+            scale_click: {
+                x: thisObj.canvas.offsetWidth / thisObj.canvas.width,
+                y: thisObj.canvas.offsetHeight / thisObj.canvas.height
+            },
+            scale_draw: {
+                x: thisObj.canvas.width / CanvasConfig.cell_img_vir_width,
+                y: thisObj.canvas.height / CanvasConfig.cell_img_vir_height
+            }
+        }
+    }
 }
 
 CellView.prototype.loadDots = function(array)
 {
 	for (var i = 0; i < array.length; i++ )
 	{
-		this.dots.push(new Dot(dataParser(array[i]), this))
+		this.dots.push(new Dot(dataParser(array[i]), this)) // This just creates an array of Dot objects each representing a dot on the cell
 	}
 }
 
 CellView.prototype.getMousePos = function(clientX,clientY)
 {
     var rect = this.canvas.getBoundingClientRect();
-    var scaleX = this.scaleX;
-    var scaleY = this.scaleY;
     
     var thisObj = this;
     var xy = {
-        x: clientX - rect.left + CanvasConfig.offset.x,
-        y: clientY - rect.top + CanvasConfig.offset.y
+        x: (clientX - rect.left + CanvasConfig.offset.x) / this.sizes.scale_click.x, // We must include the clicking scale here
+        y: (clientY - rect.top + CanvasConfig.offset.y) / this.sizes.scale_click.y  // and here
     };
     return xy;
 }
@@ -101,7 +154,7 @@ CellView.prototype.drawDots = function()
     {  
         var x = this.dots[i].x_canvas;
         var y = this.dots[i].y_canvas;
-        ctx.fillRect( x, y, 5, 5)
+        ctx.fillRect( x, y, 5, 5);
     }
 }
 
@@ -113,6 +166,7 @@ CellView.prototype.drawDots = function()
  */
 function Dot(specs,cell)
 {
+    this.cell = cell;
     
     this.img        = new Image(); // Enlarged image of the dot
     this.imgName    = this.makeImgName( specs.img_index ); // Generate path to dot image
@@ -127,16 +181,16 @@ function Dot(specs,cell)
     this.psf_img    = new Image(); // Image of psf
     
     this.rect = {
-        x1:  3.3345 *specs.sqr_x1,
-        y1:  3.3345 *specs.sqr_y1,
-        x2:  3.3345 *specs.sqr_x2,
-        y2:  3.3345 *specs.sqr_y2
+        x1:  this.cell.sizes.scale_draw.x * specs.sqr_x1,
+        y1:  this.cell.sizes.scale_draw.y * specs.sqr_y1,
+        x2:  this.cell.sizes.scale_draw.x * specs.sqr_x2,
+        y2:  this.cell.sizes.scale_draw.y * specs.sqr_y2
     };
     
-    this.cell = cell;
     
-    this.x_canvas = 3.3345 * this.x // this is the scale between the pixels of the image and the original data
-    this.y_canvas = 3.3345 * this.y
+    
+    this.x_canvas = this.cell.sizes.scale_draw.x * this.x // this is the scale between the pixels of the image and the original data
+    this.y_canvas = this.cell.sizes.scale_draw.y * this.y
 
 }
 
