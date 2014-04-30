@@ -1,5 +1,5 @@
 //JavaScript
-
+'use strict' // We must be strict
 
 function dataParser(array) //Generates a nice object with which the work is easy
 {
@@ -261,7 +261,7 @@ Dot.prototype.drawSelf = function(cellCanvas, dotCanvas, psfCanvas)
     
     if(this.psf_img.width === 0) // Load psf image only if not yet loaded
     {
-        thisObj = this;
+        var thisObj = this;
         this.psf_img.onload = function() // Only draw it when it has finished loading
         {
             var ctx = psfCanvas.getContext("2d");
