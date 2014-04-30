@@ -211,7 +211,13 @@ pip-log.txt
 #Translations
 *.mo
 
-data
-node_modules
+
 #Mr Developer
 .mr.developer.cfg
+
+
+# My stuffs #################################################################################
+
+data
+node_modules
+bootstrap*
