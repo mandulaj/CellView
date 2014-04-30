@@ -16,18 +16,6 @@ canvas {
     margin: 10px;
 }
 
-canvas_nonsquare {
-    width: 987px;
-    height: 786px;
-    border: 1px solid black;
-}
-
-canvas_small {
-    width: 200px;
-    height: 200px;
-    border: 1px solid black;
-}
-
 #dot{
 	width: 400px;
 	height: 400px; 

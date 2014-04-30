@@ -70,6 +70,9 @@ CellView.prototype.setup = function () {
     this.img.onload = function () { // Initial paint of background image
         var ctx = thisObj.canvas.getContext("2d");
         ctx.drawImage(thisObj.img, 0, 0, thisObj.canvas.width, thisObj.canvas.height);
+        ctx.font="30px Georgia";
+		ctx.fillStyle='#FFFFFF';
+		ctx.fillText("Wide field image with localisations",10,30);
     };
     this.canvas.addEventListener("mousemove", function (evt) { // Updates the mouseX and mouseY to current mouse position on move of the mouse
         thisObj.mouseX = evt.clientX;
@@ -92,7 +95,7 @@ CellView.prototype.setup = function () {
         
         var ctx = thisObj.canvas.getContext("2d");
         ctx.drawImage(thisObj.img, 0, 0, thisObj.canvas.width, thisObj.canvas.height); // repaint the background
-        
+	            
         ctx.stroke();
         thisObj.dots[imin].drawSelf(thisObj.canvas, thisObj.dot, thisObj.psf); // Draw small image of Dot and a square at the cell canvas
     });
@@ -233,12 +236,10 @@ Dot.prototype.distance = function(x,y)
 	var xs = 0;
   	var ys = 0;
  
-  	xs = this.x_canvas - x + CanvasConfig.offset.x;
-    
-  	xs = xs * xs;
+  	xs = this.x_canvas - x + CanvasConfig.offset.x;    
   	ys = this.y_canvas - y + CanvasConfig.offset.y;
-  	ys = ys * ys; 
-  	return Math.sqrt( xs + ys )
+
+  	return Math.sqrt( xs*xs + ys*ys )
 }
 
 Dot.prototype.drawSelf = function(cellCanvas, dotCanvas, psfCanvas)
@@ -250,6 +251,10 @@ Dot.prototype.drawSelf = function(cellCanvas, dotCanvas, psfCanvas)
         {
             var ctx = dotCanvas.getContext("2d");
             ctx.drawImage(thisObj.img, 0, 0, dotCanvas.width, dotCanvas.height); // Draw it on the canvas
+	    	ctx.font="60px Georgia";
+			ctx.fillStyle='#FFFFFF';
+			ctx.fillText("Estimated source W",20,50);
+
         }
         this.img.src = this.imgName;
     }
@@ -257,7 +262,13 @@ Dot.prototype.drawSelf = function(cellCanvas, dotCanvas, psfCanvas)
     {
         var ctx = dotCanvas.getContext("2d");
         ctx.drawImage(this.img, 0, 0, dotCanvas.width, dotCanvas.height); // Draw it on the canvas
+		ctx.font="60px Georgia";
+		ctx.fillStyle='#FFFFFF';
+		ctx.fillText("Estimated source W",20,50);
+
+
     }
+
     
     if(this.psf_img.width === 0) // Load psf image only if not yet loaded
     {
@@ -265,7 +276,12 @@ Dot.prototype.drawSelf = function(cellCanvas, dotCanvas, psfCanvas)
         this.psf_img.onload = function() // Only draw it when it has finished loading
         {
             var ctx = psfCanvas.getContext("2d");
-            ctx.drawImage(thisObj.psf_img, 0, 0, dotCanvas.width, dotCanvas.height); // Draw it on the canvas
+            ctx.drawImage(thisObj.psf_img, 0, 0, dotCanvas.width, dotCanvas.height); // Draw psf on the canvas
+			ctx.font="60px Georgia";
+			ctx.fillStyle='#FFFFFF';
+			ctx.fillText("Corresponding PSF",20,50);
+
+
         }
         this.psf_img.src = this.makeImgName(this.ax_pos, false); // Draw it on the canvas
     }
@@ -273,6 +289,11 @@ Dot.prototype.drawSelf = function(cellCanvas, dotCanvas, psfCanvas)
     {
         var ctx = psfCanvas.getContext("2d");
         ctx.drawImage(this.psf_img, 0, 0, dotCanvas.width, dotCanvas.height);
+		ctx.font="60px Georgia";
+		ctx.fillStyle='#FFFFFF';
+		ctx.fillText("Corresponding PSF",20,50);
+        
+        
     } 
     
     // Draw small red dot on the canvas highlighting the dot
@@ -288,6 +309,10 @@ Dot.prototype.drawSelf = function(cellCanvas, dotCanvas, psfCanvas)
     ctx.fillStyle = CanvasConfig.dot_color_on_canvas;
     var bs = CanvasConfig.dot_size_on_canvas;
     ctx.fillRect( this.x_canvas + CanvasConfig.dot_offset_on_canvas.x, this.y_canvas + CanvasConfig.dot_offset_on_canvas.y, bs, bs);
+    ctx.font="30px Georgia";
+	ctx.fillStyle='#FFFFFF';
+	ctx.fillText("Wide field image with localisations",10,30);
+
     ctx.stroke();
     
     // Set the text values to that of this Dot
