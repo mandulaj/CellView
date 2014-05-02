@@ -319,6 +319,8 @@ Dot.prototype.drawSelf = function(cellCanvas, dotCanvas, psfCanvas)
     document.getElementById("fpn").innerHTML = this.ax_pos * 50;
     document.getElementById("brn").innerHTML = this.brightness;
     document.getElementById("ren").innerHTML = this.correl;
+    document.getElementById("eval").innerHTML = this.eval_index
+    
     
     
 }
