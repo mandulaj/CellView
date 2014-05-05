@@ -14,18 +14,13 @@
         
         <div class="main">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-sm-6">
                     <h2 class="img_title">WF + localised</h2>
                     <canvas width="1000" height="1000" id="cell"></canvas>
                 </div>
-                <div class="col-md-4">
+                <div class="col-sm-3">
                     <h2 class="img_title">W</h2>
                     <canvas width="1000" height="1000" id="dot"></canvas>
-                    <h2 class="img_title">Corresponding psf</h2>
-                    <canvas width="1000" height="1000" id="psf"></canvas>
-                </div>
-                
-                <div id="numbers" class="col-md-2">
                     <h2 class="img_title">Info</h2>
                     <span class="info_title">Focus plane nm: </span>
                     <span class="info_value" id="fpn">-</span>
@@ -36,6 +31,15 @@
                     <span class="info_title">Reliability: </span>
                     <span class="info_value" id="ren">-</span>
                     <br/ >
+                    <span class="info_title">Evaluation: </span>
+                    <span class="info_value" id="eval">-</span>
+                    <br/ >
+                </div>
+                
+                <div id="numbers" class="col-sm-3">
+                    <h2 class="img_title">Corresponding psf</h2>
+                    <canvas width="1000" height="1000" id="psf"></canvas>
+                    
                 </div>
             </div>
         </div>
