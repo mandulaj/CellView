@@ -10,8 +10,6 @@ This is a simple HTML5 web app using `Canvas` and `Javascript` to enhance the us
     ```javascript
     var CanvasConfig = {
         "offset": {x: 0, y: 0},         // This is for debugging (it is the offset of the dots in case the coordinates are off-setted )
-        "cell_img_real_height": 786,    // height of background image (We can guess it from the image)
-        "cell_img_real_width": 987,     // width of background image (We can guess it from the image)
         "cell_img_vir_height": 234.9,   // IMPORTANT!!  number of vertical virtual pixels in the image (the grid the dots are positioned on)
         "cell_img_vir_width": 295.5,    // IMPORTANT!!  number of horizontal virtual pixels in the image (the grid the dots are positioned on)
         

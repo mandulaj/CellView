@@ -37,8 +37,8 @@ function CellView(canvas, dot, psf, image) {
     this.dots = []; // Array of Dot objects
     this.setup(); // setup
     
-    this.canvas.width  = CanvasConfig.cell_img_real_width; // set the size of canvas to the correct values at the top of the program
-    this.canvas.height = CanvasConfig.cell_img_real_height;
+    //this.canvas.width  = CanvasConfig.cell_img_real_width;  //987 // set the size of canvas to the correct values at the top of the program
+    //this.canvas.height = CanvasConfig.cell_img_real_height; //786
     
     
     this.sizes = {
@@ -68,8 +68,12 @@ function CellView(canvas, dot, psf, image) {
 CellView.prototype.setup = function () {
     var thisObj = this;
     this.img.onload = function () { // Initial paint of background image
+        thisObj.canvas.width = this.width;
+        thisObj.canvas.height = this.height;
         var ctx = thisObj.canvas.getContext("2d");
         ctx.drawImage(thisObj.img, 0, 0, thisObj.canvas.width, thisObj.canvas.height);
+        thisObj.updateSizes();
+        thisObj.loadDots(Cell_data);
     };
     this.canvas.addEventListener("mousemove", function (evt) { // Updates the mouseX and mouseY to current mouse position on move of the mouse
         thisObj.mouseX = evt.clientX;
@@ -97,31 +101,36 @@ CellView.prototype.setup = function () {
         thisObj.dots[imin].drawSelf(thisObj.canvas, thisObj.dot, thisObj.psf); // Draw small image of Dot and a square at the cell canvas
     });
     
-    window.onresize = function() // We must update some of these values when we resize the window (css width/height changes)
+    window.onresize = function()// We must update some of these values when we resize the window (css width/height changes)
     {
-        thisObj.sizes = {
+        thisObj.updateSizes();
+    }
+}
+
+CellView.prototype.updateSizes = function()
+{
+    this.sizes = {
             canvas: {
-                x: thisObj.canvas.width,
-                y: thisObj.canvas.height
+                x: this.canvas.width,
+                y: this.canvas.height
             },
             canvas_virt: {
                 x: CanvasConfig.cell_img_vir_width,
                 y: CanvasConfig.cell_img_vir_height
             },
             canvas_css: {
-                x: thisObj.canvas.offsetWidth,
-                y: thisObj.canvas.offsetHeight
+                x: this.canvas.offsetWidth,
+                y: this.canvas.offsetHeight
             },
             scale_click: {
-                x: thisObj.canvas.offsetWidth / thisObj.canvas.width,
-                y: thisObj.canvas.offsetHeight / thisObj.canvas.height
+                x: this.canvas.offsetWidth / this.canvas.width,
+                y: this.canvas.offsetHeight / this.canvas.height
             },
             scale_draw: {
-                x: thisObj.canvas.width / CanvasConfig.cell_img_vir_width,
-                y: thisObj.canvas.height / CanvasConfig.cell_img_vir_height
+                x: this.canvas.width / CanvasConfig.cell_img_vir_width,
+                y: this.canvas.height / CanvasConfig.cell_img_vir_height
             }
         }
-    }
 }
 
 CellView.prototype.loadDots = function(array)
@@ -191,7 +200,11 @@ function Dot(specs,cell)
     
     this.x_canvas = this.cell.sizes.scale_draw.x * this.x // this is the scale between the pixels of the image and the original data
     this.y_canvas = this.cell.sizes.scale_draw.y * this.y
-
+    if(specs.img_index%100 == 0)
+    {
+        console.log(this.cell.sizes.scale_draw.x)
+        console.log(this.cell.sizes)
+    }
 }
 
 Dot.prototype.makeImgName = function(imgNum, dot)
@@ -294,10 +307,11 @@ Dot.prototype.drawSelf = function(cellCanvas, dotCanvas, psfCanvas)
     document.getElementById("fpn").innerHTML = this.ax_pos * 50;
     document.getElementById("brn").innerHTML = this.brightness;
     document.getElementById("ren").innerHTML = this.correl;
+    document.getElementById("eval").innerHTML = this.eval_index
     
     
 }
 
 var cell = new CellView("cell", "dot", "psf", "data/wf_loc.png");
-cell.loadDots(Cell_data);
+
 
